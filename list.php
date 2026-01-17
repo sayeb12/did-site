@@ -1,4 +1,6 @@
 <?php
+// Set Dhaka timezone
+date_default_timezone_set('Asia/Dhaka');
 require_once __DIR__ . '/auth.php';
 require_login();
 
@@ -19,10 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
         die('CSRF token validation failed');
     }
-    
+
     $id = (int)($_POST['id'] ?? 0);
     $status = $_POST['status'] ?? 'pending';
-    
+
     if ($id > 0 && in_array($status, ['pending', 'approved', 'rejected'])) {
         // Only admin and viewer can update status
         if (has_permission('approve_user')) {
@@ -30,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
             $stmt->execute([$status, $_SESSION['admin_id'], $id]);
         }
     }
-    
+
     // Redirect to avoid form resubmission
     header("Location: list.php?" . http_build_query($_GET));
     exit;
@@ -82,62 +84,116 @@ $total_count = array_sum($counts);
 ?>
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Records List</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        table { width:100%; border-collapse: collapse; overflow:hidden; border-radius:14px; }
-        th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,.10); text-align:left; font-size: 13px; }
-        th { color: var(--muted); font-size: 12px; font-weight: 700; background: rgba(255,255,255,.04); }
-        tr:hover td { background: rgba(90,167,255,.08); }
-        .topbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
-        .searchbox { display:flex; gap:10px; flex-wrap:wrap; align-items:center; width: 100%; }
-        .searchbox input { flex:1; min-width: 220px; }
-        .pill { font-size:12px; color: var(--muted); }
-        .btnmini { 
-            padding:7px 10px; 
-            border-radius:10px; 
-            display:inline-block; 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 14px;
+        }
+
+        th,
+        td {
+            padding: 10px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, .10);
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            background: rgba(255, 255, 255, .04);
+        }
+
+        tr:hover td {
+            background: rgba(90, 167, 255, .08);
+        }
+
+        .topbar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .searchbox {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+            width: 100%;
+        }
+
+        .searchbox input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .pill {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .btnmini {
+            padding: 7px 10px;
+            border-radius: 10px;
+            display: inline-block;
             text-decoration: none;
             font-size: 12px;
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,.2);
-            background: rgba(255,255,255,.1);
+            border: 1px solid rgba(255, 255, 255, .2);
+            background: rgba(255, 255, 255, .1);
             color: white;
         }
+
         .btnmini:hover {
-            background: rgba(255,255,255,.15);
+            background: rgba(255, 255, 255, .15);
         }
+
         .btnmini.btn-danger {
             background: rgba(220, 53, 69, 0.8);
             border: 1px solid rgba(220, 53, 69, 0.9);
         }
+
         .btnmini.btn-danger:hover {
             background: rgba(220, 53, 69, 1);
         }
+
         .action-buttons {
             display: flex;
             gap: 5px;
             align-items: center;
             flex-wrap: wrap;
         }
+
         .btnmini.pdf-btn {
             background: rgba(40, 167, 69, 0.8);
             border: 1px solid rgba(40, 167, 69, 0.9);
         }
+
         .btnmini.pdf-btn:hover {
             background: rgba(40, 167, 69, 1);
         }
+
         .btnmini.edit-btn {
             background: rgba(255, 193, 7, 0.8);
             border: 1px solid rgba(255, 193, 7, 0.9);
             color: #212529;
         }
+
         .btnmini.edit-btn:hover {
             background: rgba(255, 193, 7, 1);
         }
+
         .status-badge {
             display: inline-block;
             padding: 3px 8px;
@@ -146,36 +202,53 @@ $total_count = array_sum($counts);
             font-weight: bold;
             text-transform: uppercase;
         }
-        .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
-        .status-approved { background: rgba(40, 167, 69, 0.2); color: #28a745; }
-        .status-rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-approved {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .status-rejected {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+
         .status-filter {
             display: flex;
             gap: 5px;
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
+
         .status-filter a {
             padding: 5px 10px;
             border-radius: 10px;
             text-decoration: none;
             font-size: 12px;
-            background: rgba(255,255,255,.05);
-            border: 1px solid rgba(255,255,255,.1);
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .1);
         }
+
         .status-filter a.active {
             background: var(--accent);
             color: #061022;
         }
+
         select {
             padding: 5px 10px;
             border-radius: 8px;
-            background: rgba(10,16,33,.55);
+            background: rgba(10, 16, 33, .55);
             color: white;
-            border: 1px solid rgba(255,255,255,.14);
+            border: 1px solid rgba(255, 255, 255, .14);
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -198,8 +271,7 @@ $total_count = array_sum($counts);
                     <input
                         name="q"
                         value="<?= htmlspecialchars($q) ?>"
-                        placeholder="Search by record id, username, name, email, phone, or NID number..."
-                    >
+                        placeholder="Search by record id, username, name, email, phone, or NID number...">
                     <select name="status" onchange="this.form.submit()">
                         <option value="all" <?= $status_filter === 'all' ? 'selected' : '' ?>>All Status (<?= $total_count ?>)</option>
                         <option value="pending" <?= $status_filter === 'pending' ? 'selected' : '' ?>>Pending (<?= $counts['pending'] ?? 0 ?>)</option>
@@ -257,7 +329,7 @@ $total_count = array_sum($counts);
                                     <td>
                                         <a href="preview.php?id=<?= (int)$r['id'] ?>"><?= htmlspecialchars($r['full_name']) ?></a>
                                     </td>
-                                    
+
                                     <td>
                                         <span class="status-badge status-<?= htmlspecialchars($r['status']) ?>">
                                             <?= htmlspecialchars(ucfirst($r['status'])) ?>
@@ -270,24 +342,23 @@ $total_count = array_sum($counts);
                                     <td><?= htmlspecialchars($r['email']) ?></td>
                                     <td><?= htmlspecialchars($r['phone']) ?></td>
                                     <td><?= htmlspecialchars($r['nid_assigned_number']) ?></td>
-                                    <td><?= htmlspecialchars($r['created_at']) ?></td>
-
+                                    <td><?= date('Y-m-d H:i:s', strtotime($r['created_at'])) ?></td>
                                     <td>
                                         <div class="action-buttons">
                                             <a class="btnmini pdf-btn" href="generate_pdf.php?id=<?= (int)$r['id'] ?>" title="Generate PDF">
                                                 PDF
                                             </a>
-                                            
+
                                             <?php if (has_permission('edit_user')): ?>
                                                 <a class="btnmini edit-btn" href="edit.php?id=<?= (int)$r['id'] ?>" title="Edit Record">
                                                     Edit
                                                 </a>
                                             <?php endif; ?>
-                                            
+
                                             <?php if (has_permission('all') || $current_role === 'admin'): ?>
                                                 <form method="post" action="delete.php"
-                                                      onsubmit="return confirm('Delete this record permanently?');"
-                                                      style="display:inline;">
+                                                    onsubmit="return confirm('Delete this record permanently?');"
+                                                    style="display:inline;">
                                                     <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                                                     <input type="hidden" name="token" value="<?= htmlspecialchars($csrf) ?>">
                                                     <button class="btnmini btn-danger" type="submit" title="Delete Record">
@@ -295,7 +366,7 @@ $total_count = array_sum($counts);
                                                     </button>
                                                 </form>
                                             <?php endif; ?>
-                                            
+
                                             <?php if (has_permission('approve_user') && in_array($current_role, ['admin', 'viewer'])): ?>
                                                 <form method="post" style="display:inline;" onsubmit="return confirm('Change status?');">
                                                     <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
@@ -325,7 +396,7 @@ $total_count = array_sum($counts);
             <?php endif; ?>
         </div>
     </div>
-    
+
     <script>
         // Add confirmation for delete action
         document.addEventListener('DOMContentLoaded', function() {
@@ -340,4 +411,5 @@ $total_count = array_sum($counts);
         });
     </script>
 </body>
+
 </html>
