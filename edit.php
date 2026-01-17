@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/auth.php';
-require_login();
+require_any_role(['admin', 'editor']); // Only admin and editor can edit
 
 require_once __DIR__ . '/db.php';
 
@@ -98,7 +98,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             address = ?, 
             nid_assigned_number = ?, 
             nid_front_path = ?, 
-            nid_back_path = ?
+            nid_back_path = ?,
+            status = 'pending' -- Reset status when edited
             WHERE id = ?");
         
         $stmt->execute([
@@ -127,111 +128,128 @@ $csrf = $_SESSION['csrf_token'];
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Edit Record</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .form-group { margin-bottom: 15px; }
-    label { display: block; margin-bottom: 5px; font-weight: 500; }
-    input, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05); color: white; }
-    textarea { min-height: 100px; resize: vertical; }
-    .current-files { margin: 10px 0; padding: 10px; background: rgba(255,255,255,.05); border-radius: 8px; }
-    .current-files img { max-width: 200px; margin: 5px; border: 1px solid rgba(255,255,255,.1); border-radius: 5px; }
-    .file-note { font-size: 12px; color: var(--muted); margin-top: 5px; }
-  </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Edit Record</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; }
+        input, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05); color: white; }
+        textarea { min-height: 100px; resize: vertical; }
+        .current-files { margin: 10px 0; padding: 10px; background: rgba(255,255,255,.05); border-radius: 8px; }
+        .current-files img { max-width: 200px; margin: 5px; border: 1px solid rgba(255,255,255,.1); border-radius: 5px; }
+        .file-note { font-size: 12px; color: var(--muted); margin-top: 5px; }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-left: 10px;
+        }
+        .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .status-approved { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .status-rejected { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="h1">Edit Record: <?= htmlspecialchars($user['full_name']) ?></div>
-      <a class="btn btn-ghost" href="list.php">Back to List</a>
-    </div>
+    <div class="container">
+        <div class="header">
+            <div class="h1">
+                Edit Record: <?= htmlspecialchars($user['full_name']) ?>
+                <span class="status-badge status-<?= htmlspecialchars($user['status']) ?>">
+                    <?= htmlspecialchars(ucfirst($user['status'])) ?>
+                </span>
+            </div>
+            <a class="btn btn-ghost" href="list.php">Back to List</a>
+        </div>
 
-    <div class="card">
-      <?php if (!empty($errors)): ?>
-        <div class="error">
-          <?php foreach ($errors as $error): ?>
-            <div><?= htmlspecialchars($error) ?></div>
-          <?php endforeach; ?>
+        <div class="card">
+            <?php if (!empty($errors)): ?>
+                <div class="error">
+                    <?php foreach ($errors as $error): ?>
+                        <div><?= htmlspecialchars($error) ?></div>
+                    <?php endforeach; ?>
+                </div>
+                <div class="hr"></div>
+            <?php endif; ?>
+            
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
+                
+                <div class="form-group">
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username']) ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="full_name">Full Name *</label>
+                    <input type="text" id="full_name" name="full_name" value="<?= htmlspecialchars($user['full_name']) ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone *</label>
+                    <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($user['phone']) ?>" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address *</label>
+                    <textarea id="address" name="address" required><?= htmlspecialchars($user['address']) ?></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nid_assigned_number">NID Assigned Number</label>
+                    <input type="text" id="nid_assigned_number" name="nid_assigned_number" value="<?= htmlspecialchars($user['nid_assigned_number']) ?>">
+                </div>
+                
+                <!-- Current NID Front -->
+                <div class="current-files">
+                    <strong>Current NID Front:</strong><br>
+                    <?php if (file_exists($user['nid_front_path'])): ?>
+                        <img src="<?= htmlspecialchars($user['nid_front_path']) ?>" alt="Current NID Front">
+                    <?php else: ?>
+                        <div class="error">File not found: <?= htmlspecialchars($user['nid_front_path']) ?></div>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nid_front">Update NID Front (Optional)</label>
+                    <input type="file" id="nid_front" name="nid_front" accept="image/*">
+                    <div class="file-note">Leave empty to keep current file</div>
+                </div>
+                
+                <!-- Current NID Back -->
+                <div class="current-files">
+                    <strong>Current NID Back:</strong><br>
+                    <?php if (file_exists($user['nid_back_path'])): ?>
+                        <img src="<?= htmlspecialchars($user['nid_back_path']) ?>" alt="Current NID Back">
+                    <?php else: ?>
+                        <div class="error">File not found: <?= htmlspecialchars($user['nid_back_path']) ?></div>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nid_back">Update NID Back (Optional)</label>
+                    <input type="file" id="nid_back" name="nid_back" accept="image/*">
+                    <div class="file-note">Leave empty to keep current file</div>
+                </div>
+                
+                <div class="hr"></div>
+                
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-primary" type="submit">Update Record</button>
+                    <a class="btn btn-ghost" href="list.php">Cancel</a>
+                    <a class="btn btn-ghost" href="preview.php?id=<?= $id ?>">Preview</a>
+                </div>
+            </form>
         </div>
-        <div class="hr"></div>
-      <?php endif; ?>
-      
-      <form method="post" enctype="multipart/form-data">
-        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf) ?>">
-        
-        <div class="form-group">
-          <label for="username">Username *</label>
-          <input type="text" id="username" name="username" value="<?= htmlspecialchars($user['username']) ?>" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="full_name">Full Name *</label>
-          <input type="text" id="full_name" name="full_name" value="<?= htmlspecialchars($user['full_name']) ?>" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="email">Email *</label>
-          <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="phone">Phone *</label>
-          <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($user['phone']) ?>" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="address">Address *</label>
-          <textarea id="address" name="address" required><?= htmlspecialchars($user['address']) ?></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label for="nid_assigned_number">NID Assigned Number</label>
-          <input type="text" id="nid_assigned_number" name="nid_assigned_number" value="<?= htmlspecialchars($user['nid_assigned_number']) ?>">
-        </div>
-        
-        <!-- Current NID Front -->
-        <div class="current-files">
-          <strong>Current NID Front:</strong><br>
-          <?php if (file_exists($user['nid_front_path'])): ?>
-            <img src="<?= htmlspecialchars($user['nid_front_path']) ?>" alt="Current NID Front">
-          <?php else: ?>
-            <div class="error">File not found: <?= htmlspecialchars($user['nid_front_path']) ?></div>
-          <?php endif; ?>
-        </div>
-        
-        <div class="form-group">
-          <label for="nid_front">Update NID Front (Optional)</label>
-          <input type="file" id="nid_front" name="nid_front" accept="image/*">
-          <div class="file-note">Leave empty to keep current file</div>
-        </div>
-        
-        <!-- Current NID Back -->
-        <div class="current-files">
-          <strong>Current NID Back:</strong><br>
-          <?php if (file_exists($user['nid_back_path'])): ?>
-            <img src="<?= htmlspecialchars($user['nid_back_path']) ?>" alt="Current NID Back">
-          <?php else: ?>
-            <div class="error">File not found: <?= htmlspecialchars($user['nid_back_path']) ?></div>
-          <?php endif; ?>
-        </div>
-        
-        <div class="form-group">
-          <label for="nid_back">Update NID Back (Optional)</label>
-          <input type="file" id="nid_back" name="nid_back" accept="image/*">
-          <div class="file-note">Leave empty to keep current file</div>
-        </div>
-        
-        <div class="hr"></div>
-        
-        <div style="display:flex; gap:10px;">
-          <button class="btn btn-primary" type="submit">Update Record</button>
-          <a class="btn btn-ghost" href="list.php">Cancel</a>
-          <a class="btn btn-ghost" href="preview.php?id=<?= $id ?>">Preview</a>
-        </div>
-      </form>
     </div>
-  </div>
 </body>
 </html>

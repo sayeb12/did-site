@@ -5,18 +5,20 @@ require_once __DIR__ . '/db.php';
 $adminUsername = "admin";
 $adminPassword = "admin12345"; // change to strong password
 $fullName = "System Admin";
+$role = "admin"; // admin, editor, or viewer
 
 $hash = password_hash($adminPassword, PASSWORD_DEFAULT);
 
-$stmt = $pdo->prepare("INSERT INTO admin_users (username, password_hash, full_name)
-                       VALUES (:u, :p, :f)");
+$stmt = $pdo->prepare("INSERT INTO admin_users (username, password_hash, full_name, role)
+                       VALUES (:u, :p, :f, :r)");
 try {
-  $stmt->execute([
-    ':u' => $adminUsername,
-    ':p' => $hash,
-    ':f' => $fullName
-  ]);
-  echo "Admin created successfully. NOW DELETE create_admin.php";
+    $stmt->execute([
+        ':u' => $adminUsername,
+        ':p' => $hash,
+        ':f' => $fullName,
+        ':r' => $role
+    ]);
+    echo "Admin created successfully. NOW DELETE create_admin.php";
 } catch (PDOException $e) {
-  echo "Failed: maybe username exists already.";
+    echo "Failed: maybe username exists already.";
 }

@@ -1,0 +1,52 @@
+[18-Dec-2025 05:57:44 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 05:58:40 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 05:59:17 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 06:42:14 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 06:43:52 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 06:46:10 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 06:46:42 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 06:46:44 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 06:48:02 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[18-Dec-2025 06:48:34 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[22-Dec-2025 11:40:31 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[15-Jan-2026 11:35:35 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[15-Jan-2026 11:37:41 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[15-Jan-2026 11:40:00 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[15-Jan-2026 11:40:05 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/delete.php on line 21
+[15-Jan-2026 11:40:05 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[15-Jan-2026 11:40:06 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[15-Jan-2026 12:18:39 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 00:26:26 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 00:27:47 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 00:41:13 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 00:45:18 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 00:51:06 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 00:52:24 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 00:52:37 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:01:14 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:01:21 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/edit.php on line 7
+[16-Jan-2026 01:03:34 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:13:48 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:15:04 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:16:54 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:18:40 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:26:45 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:32:48 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 01:33:12 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 05:44:25 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/list.php on line 7
+[16-Jan-2026 05:44:36 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/ddialer/did-plan.ddialer.xyz/edit.php on line 7
+[16-Jan-2026 06:24:51 UTC] Bengali font not found at: /home/ddialer/did-plan.ddialer.xyz/fonts/NotoSansBengali-VariableFont_wdth,wght.ttf
+[16-Jan-2026 06:24:51 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Dompdf\Options::setIsUnicodeEnabled() in /home/ddialer/did-plan.ddialer.xyz/generate_pdf.php:138
+Stack trace:
+#0 {main}
+  thrown in /home/ddialer/did-plan.ddialer.xyz/generate_pdf.php on line 138
+[16-Jan-2026 06:24:56 UTC] Bengali font not found at: /home/ddialer/did-plan.ddialer.xyz/fonts/NotoSansBengali-VariableFont_wdth,wght.ttf
+[16-Jan-2026 06:24:56 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Dompdf\Options::setIsUnicodeEnabled() in /home/ddialer/did-plan.ddialer.xyz/generate_pdf.php:138
+Stack trace:
+#0 {main}
+  thrown in /home/ddialer/did-plan.ddialer.xyz/generate_pdf.php on line 138
+[16-Jan-2026 06:25:19 UTC] Bengali font not found at: /home/ddialer/did-plan.ddialer.xyz/fonts/NotoSansBengali-VariableFont_wdth,wght.ttf
+[16-Jan-2026 06:25:19 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method Dompdf\Options::setIsUnicodeEnabled() in /home/ddialer/did-plan.ddialer.xyz/generate_pdf.php:138
+Stack trace:
+#0 {main}
+  thrown in /home/ddialer/did-plan.ddialer.xyz/generate_pdf.php on line 138
