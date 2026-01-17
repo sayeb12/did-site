@@ -4,7 +4,7 @@ require_login();
 
 require_once __DIR__ . '/db.php';
 
-session_start();
+// session_start();
 if (!isset($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
