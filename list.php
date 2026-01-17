@@ -4,7 +4,7 @@ require_login();
 
 require_once __DIR__ . '/db.php';
 
-
+session_start();
 if (!isset($_SESSION['csrf_token'])) {
   $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -54,14 +54,54 @@ $rows = $stmt->fetchAll();
     .searchbox { display:flex; gap:10px; flex-wrap:wrap; align-items:center; width: 100%; }
     .searchbox input { flex:1; min-width: 220px; }
     .pill { font-size:12px; color: var(--muted); }
-    .btnmini { padding:7px 10px; border-radius:10px; display:inline-block; }
+    .btnmini { 
+      padding:7px 10px; 
+      border-radius:10px; 
+      display:inline-block; 
+      text-decoration: none;
+      font-size: 12px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.1);
+      color: white;
+    }
+    .btnmini:hover {
+      background: rgba(255,255,255,.15);
+    }
+    .btnmini.btn-danger {
+      background: rgba(220, 53, 69, 0.8);
+      border: 1px solid rgba(220, 53, 69, 0.9);
+    }
+    .btnmini.btn-danger:hover {
+      background: rgba(220, 53, 69, 1);
+    }
+    .action-buttons {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+    .btnmini.pdf-btn {
+      background: rgba(40, 167, 69, 0.8);
+      border: 1px solid rgba(40, 167, 69, 0.9);
+    }
+    .btnmini.pdf-btn:hover {
+      background: rgba(40, 167, 69, 1);
+    }
+    .btnmini.edit-btn {
+      background: rgba(255, 193, 7, 0.8);
+      border: 1px solid rgba(255, 193, 7, 0.9);
+      color: #212529;
+    }
+    .btnmini.edit-btn:hover {
+      background: rgba(255, 193, 7, 1);
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div class="h1">All Saved Records</div>
-      <div class="badge">Search • Click row to preview • PDF • Delete</div>
+      <a class="btn btn-ghost" href="logout.php">Logout</a>
     </div>
 
     <div class="card">
@@ -87,6 +127,11 @@ $rows = $stmt->fetchAll();
         <div class="hr"></div>
       <?php endif; ?>
 
+      <?php if (isset($_GET['updated'])): ?>
+        <div class="success">Record updated successfully.</div>
+        <div class="hr"></div>
+      <?php endif; ?>
+
       <?php if (count($rows) === 0): ?>
         <div class="error">No records found.</div>
       <?php else: ?>
@@ -101,8 +146,7 @@ $rows = $stmt->fetchAll();
                 <th>Phone</th>
                 <th>NID No.</th>
                 <th>Created</th>
-                <th>PDF</th>
-                <th>Delete</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -126,21 +170,25 @@ $rows = $stmt->fetchAll();
                   <td><?= htmlspecialchars($r['created_at']) ?></td>
 
                   <td>
-                    <a class="btn btn-ghost btnmini" href="generate_pdf.php?id=<?= (int)$r['id'] ?>">
-                      PDF
-                    </a>
-                  </td>
-
-                  <td>
-                    <form method="post" action="delete.php"
-                          onsubmit="return confirm('Delete this record permanently?');"
-                          style="display:inline;">
-                      <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
-                      <input type="hidden" name="token" value="<?= htmlspecialchars($csrf) ?>">
-                      <button class="btn btn-danger btnmini" type="submit">
-                        Delete
-                      </button>
-                    </form>
+                    <div class="action-buttons">
+                      <a class="btnmini pdf-btn" href="generate_pdf.php?id=<?= (int)$r['id'] ?>" title="Generate PDF">
+                        PDF
+                      </a>
+                      
+                      <a class="btnmini edit-btn" href="edit.php?id=<?= (int)$r['id'] ?>" title="Edit Record">
+                        Edit
+                      </a>
+                      
+                      <form method="post" action="delete.php"
+                            onsubmit="return confirm('Delete this record permanently?');"
+                            style="display:inline;">
+                        <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                        <input type="hidden" name="token" value="<?= htmlspecialchars($csrf) ?>">
+                        <button class="btnmini btn-danger" type="submit" title="Delete Record">
+                          Delete
+                        </button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -154,5 +202,19 @@ $rows = $stmt->fetchAll();
       <?php endif; ?>
     </div>
   </div>
+  
+  <script>
+    // Add confirmation for delete action
+    document.addEventListener('DOMContentLoaded', function() {
+      const deleteForms = document.querySelectorAll('form[action="delete.php"]');
+      deleteForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+          if (!confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
+            e.preventDefault();
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
