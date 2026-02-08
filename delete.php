@@ -25,7 +25,7 @@ if (!isset($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $to
 }
 
 // Get file paths so we can delete uploaded images too
-$stmt = $pdo->prepare("SELECT nid_front_path, nid_back_path FROM users WHERE id=:id");
+$stmt = $pdo->prepare("SELECT nid_front_path, nid_back_path, personal_photo_path, trade_license_path FROM users WHERE id=:id");
 $stmt->execute([':id' => $id]);
 $row = $stmt->fetch();
 
@@ -35,7 +35,7 @@ if ($row) {
     $del->execute([':id' => $id]);
 
     // Delete image files from disk (if they exist)
-    foreach (['nid_front_path','nid_back_path'] as $k) {
+    foreach (['nid_front_path','nid_back_path','personal_photo_path','trade_license_path'] as $k) {
         $rel = $row[$k] ?? '';
         if ($rel) {
             $full = __DIR__ . '/' . $rel;

@@ -47,6 +47,8 @@ if ($q !== '') {
         CAST(id AS CHAR) LIKE :q
         OR username LIKE :q
         OR full_name LIKE :q
+        OR company_name LIKE :q
+        OR did_number LIKE :q
         OR email LIKE :q
         OR phone LIKE :q
         OR nid_assigned_number LIKE :q
@@ -182,6 +184,24 @@ $total_count = array_sum($counts);
 
         .btnmini.pdf-btn:hover {
             background: rgba(40, 167, 69, 1);
+        }
+
+        .btnmini.form-btn {
+            background: rgba(23, 162, 184, 0.8);
+            border: 1px solid rgba(23, 162, 184, 0.9);
+        }
+
+        .btnmini.form-btn:hover {
+            background: rgba(23, 162, 184, 1);
+        }
+
+        .btnmini.zip-btn {
+            background: rgba(0, 123, 255, 0.8);
+            border: 1px solid rgba(0, 123, 255, 0.9);
+        }
+
+        .btnmini.zip-btn:hover {
+            background: rgba(0, 123, 255, 1);
         }
 
         .btnmini.edit-btn {
@@ -347,6 +367,12 @@ $total_count = array_sum($counts);
                                         <div class="action-buttons">
                                             <a class="btnmini pdf-btn" href="generate_pdf.php?id=<?= (int)$r['id'] ?>" title="Generate PDF">
                                                 PDF
+                                            </a>
+                                            <a class="btnmini form-btn" href="generate_form_pdf.php?id=<?= (int)$r['id'] ?>" title="Generate Form PDF">
+                                                Form
+                                            </a>
+                                            <a class="btnmini zip-btn" href="download_zip.php?id=<?= (int)$r['id'] ?>" title="Download ZIP Bundle">
+                                                ZIP
                                             </a>
 
                                             <?php if (has_permission('edit_user')): ?>

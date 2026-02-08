@@ -37,6 +37,22 @@ require_any_role(['admin', 'editor']); // Only admin and editor can add records
                         <input name="full_name" required maxlength="120" placeholder="e.g. S M Mohibullah Apon">
                     </div>
                     <div>
+                        <label>Company Name</label>
+                        <input name="company_name" required maxlength="150" placeholder="e.g. RANKS ITT">
+                    </div>
+                    <div>
+                        <label>DID Number</label>
+                        <input name="did_number" required maxlength="80" placeholder="e.g. 0961700XXXX">
+                    </div>
+                    <div>
+                        <label>Trunk Password</label>
+                        <input name="trunk_password" required maxlength="120" placeholder="e.g. TrunkPass123">
+                    </div>
+                    <div>
+                        <label>No. of Channels</label>
+                        <input type="number" name="channel_count" required min="1" max="9999" placeholder="e.g. 30">
+                    </div>
+                    <div>
                         <label>Email</label>
                         <input type="email" name="email" required maxlength="120" placeholder="e.g. user@email.com">
                     </div>
@@ -51,6 +67,19 @@ require_any_role(['admin', 'editor']); // Only admin and editor can add records
                     <div style="grid-column:1 / -1">
                         <label>Assigned Number</label>
                         <input name="nid_assigned_number" required maxlength="80" placeholder="e.g. NID-00012345">
+                    </div>
+
+                    <div>
+                        <label>Personal Photo (JPG/PNG/WebP)</label>
+                        <input type="file" name="personal_photo" accept="image/*" required
+                               onchange="previewImage(this,'personalPrev')">
+                        <div class="small">Passport size preferred</div>
+                        <img id="personalPrev" class="previewimg" alt="Personal photo preview" style="margin-top:8px;">
+                    </div>
+                    <div>
+                        <label>Trade License (JPG/PNG/WebP/PDF)</label>
+                        <input type="file" name="trade_license" accept="image/*,application/pdf">
+                        <div class="small">Optional</div>
                     </div>
 
                     <div>

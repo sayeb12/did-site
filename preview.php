@@ -74,6 +74,10 @@ if ($current_role === 'viewer' && !in_array($user['status'], ['approved', 'pendi
 
             <div class="kv"><div class="k">Username</div><div class="v"><?= htmlspecialchars($user['username']) ?></div></div>
             <div class="kv"><div class="k">Full Name</div><div class="v"><?= htmlspecialchars($user['full_name']) ?></div></div>
+            <div class="kv"><div class="k">Company Name</div><div class="v"><?= htmlspecialchars($user['company_name'] ?? '') ?></div></div>
+            <div class="kv"><div class="k">DID Number</div><div class="v"><?= htmlspecialchars($user['did_number'] ?? '') ?></div></div>
+            <div class="kv"><div class="k">Trunk Password</div><div class="v"><?= htmlspecialchars($user['trunk_password'] ?? '') ?></div></div>
+            <div class="kv"><div class="k">No. of Channels</div><div class="v"><?= htmlspecialchars((string)($user['channel_count'] ?? '')) ?></div></div>
             <div class="kv"><div class="k">Email</div><div class="v"><?= htmlspecialchars($user['email']) ?></div></div>
             <div class="kv"><div class="k">Phone</div><div class="v"><?= htmlspecialchars($user['phone']) ?></div></div>
             <div class="kv"><div class="k">Address</div><div class="v"><?= nl2br(htmlspecialchars($user['address'])) ?></div></div>
@@ -87,6 +91,31 @@ if ($current_role === 'viewer' && !in_array($user['status'], ['approved', 'pendi
             <div class="hr"></div>
 
             <div class="imgrow">
+                <div>
+                    <div class="small">Personal Photo</div>
+                    <?php if (!empty($user['personal_photo_path'])): ?>
+                        <img class="previewimg" src="<?= htmlspecialchars($user['personal_photo_path']) ?>" alt="Personal Photo">
+                        <div class="small"><a href="<?= htmlspecialchars($user['personal_photo_path']) ?>" download>Download photo</a></div>
+                    <?php else: ?>
+                        <div class="small">Not provided</div>
+                    <?php endif; ?>
+                </div>
+                <div>
+                    <div class="small">Trade License</div>
+                    <?php if (!empty($user['trade_license_path'])): ?>
+                        <?php if (strtolower(pathinfo($user['trade_license_path'], PATHINFO_EXTENSION)) === 'pdf'): ?>
+                            <div class="small"><a href="<?= htmlspecialchars($user['trade_license_path']) ?>" target="_blank">View Trade License (PDF)</a></div>
+                        <?php else: ?>
+                            <img class="previewimg" src="<?= htmlspecialchars($user['trade_license_path']) ?>" alt="Trade License">
+                            <div class="small"><a href="<?= htmlspecialchars($user['trade_license_path']) ?>" download>Download trade license</a></div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <div class="small">Not provided</div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <div class="imgrow" style="margin-top:14px;">
                 <div>
                     <div class="small">NID Front</div>
                     <img class="previewimg" src="<?= htmlspecialchars($user['nid_front_path']) ?>" alt="NID Front">
@@ -105,6 +134,8 @@ if ($current_role === 'viewer' && !in_array($user['status'], ['approved', 'pendi
                     <a class="btn btn-ghost" href="index.php">Add Another</a>
                 <?php endif; ?>
                 <a class="btn btn-primary" href="generate_pdf.php?id=<?= (int)$user['id'] ?>">Generate PDF</a>
+                <a class="btn btn-ghost" href="generate_form_pdf.php?id=<?= (int)$user['id'] ?>">Form PDF</a>
+                <a class="btn btn-ghost" href="download_zip.php?id=<?= (int)$user['id'] ?>">Download ZIP</a>
                 <?php if (has_permission('edit_user')): ?>
                     <a class="btn btn-ghost" href="edit.php?id=<?= (int)$user['id'] ?>">Edit Record</a>
                 <?php endif; ?>
